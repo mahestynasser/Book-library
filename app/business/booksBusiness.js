@@ -32,6 +32,9 @@ var createBook = async (obj) => {
         console.log('invalid Category');
         return ({error: "invalid category id"});
     }
+    if(await isDuplicate(obj))
+    return {error: 'can not have 2 books with the same name'};
+    else
     return await bookDAL.createBook(obj);
 }
 
@@ -54,6 +57,9 @@ var updateBook = async (id, obj) => {
             return ({error: "invalid category id"});
         }
     }
+    if(await isDuplicate(obj, id))
+    return {error: 'can not have 2 books with the same name'};
+    else
     return await bookDAL.updateBook(id, obj);
 }
 
@@ -77,6 +83,20 @@ var invalidBookInput = (book) => {
         category : Joi.string()
     };
     return Joi.validate(book, schema);
+}
+
+var isDuplicate = async (obj, id) => {
+    var books = await getBooks();
+    var exist = _.find(books, {'title' : obj.title});
+    if(exist) {
+        if(id) {
+        if(exist.id === id)
+        return false;
+        }
+        return true;
+    }
+    else
+    return false;
 }
 
 module.exports = {

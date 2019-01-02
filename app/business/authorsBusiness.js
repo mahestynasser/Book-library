@@ -21,6 +21,9 @@ var validateAuthorId = async (id) => {
 }
 
 var createAuthor = async (obj) => {
+    if(await isDuplicate(obj))
+    return {error: 'can not have 2 authors with the same name'};
+    else
     return await authorDAL.createAuthor(obj);
 }
 
@@ -29,7 +32,9 @@ var updateAuthor = async (id, obj) => {
         console.log('Author id is not valid');
         return ({error: "invalid id"});
     }
-    return await authorDAL.updateAuthor(id, obj);
+    if(await isDuplicate(obj, id))
+    return {error: 'can not have 2 authors with the same name'};
+    else return await authorDAL.updateAuthor(id, obj);
 }
 
 var deleteAuthor = async (id) => {
@@ -49,6 +54,20 @@ var relationExist = async (authId) => {
     var exist = _.find(books, {'author' : authId})
     if(exist)
     return true;
+    else
+    return false;
+}
+
+var isDuplicate = async (obj, id) => {
+    var authors = await getAuthors();
+    var exist = _.find(authors, {'name' : obj.name});
+    if(exist) {
+        if(id) {
+        if(exist.id === id)
+        return false;
+        }
+        return true;
+    }
     else
     return false;
 }

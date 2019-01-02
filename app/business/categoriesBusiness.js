@@ -17,6 +17,9 @@ var searchCategories = async(obj) => {
 };
 
 var createCategory = async(obj) => {
+    if(await isDuplicate(obj))
+    return {error: 'can not have 2 categories with the same name'};
+    else
     return await categoryDAL.createCategory(obj);
 }
 
@@ -26,9 +29,23 @@ var validateCategoryId = async(id) => {
 
 var relationExist = async (id) => {
     var books = await bookDAL.getBooks();
-    var exist = _.find(books, {'category' : id})
+    var exist = _.find(books, {'category' : id});
     if(exist)
     return true;
+    else
+    return false;
+}
+
+var isDuplicate = async (obj, id) => {
+    var categories = await getCategories();
+    var exist = _.find(categories, {'name' : obj.name});
+    if(exist) {
+        if(id) {
+        if(exist.id === id)
+        return false;
+        }
+        return true;
+    }
     else
     return false;
 }
@@ -46,6 +63,8 @@ var updateCategory = async(id, obj) => {
         console.log('Category id is not valid');
         return ({error: "invalid category id"});
     }
+    if(await isDuplicate(obj, id))
+    return {error: 'can not have 2 categories with the same name'};
     else return await categoryDAL.updateCategory(id, obj);
 }
 

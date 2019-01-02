@@ -708,3 +708,10 @@
 {"level":"error","message":"invalid id","time":"2018-12-30T14:15:22.237Z"}
 {"level":"error","message":"Category that has a relation can not be deleted","time":"2018-12-30T14:15:22.243Z"}
 {"level":"error","message":"Invalid category id","time":"2018-12-30T14:15:22.264Z"}
+{"level":"error","message":"can not have 2 categories with the same name","time":"2019-01-02T12:23:51.884Z"}
+{"level":"error","message":"can not have 2 categories with the same name","time":"2019-01-02T12:23:55.882Z"}
+{"level":"error","message":"can not have 2 categories with the same name","time":"2019-01-02T12:25:22.229Z"}
+{"level":"error","message":"can not have 2 authors with the same name","time":"2019-01-02T12:39:54.071Z"}
+{"level":"error","message":"can not have 2 authors with the same name","time":"2019-01-02T12:40:44.990Z"}
+{"level":"error","message":"can not have 2 books with the same name","time":"2019-01-02T12:49:22.120Z"}
+{"level":"error","message":"can not have 2 books with the same name","time":"2019-01-02T12:49:43.202Z"}

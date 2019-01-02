@@ -138,6 +138,17 @@ router.post('/create', async(req, res) => {
         }
         else {
             var auth = await authorBusiness.createAuthor(req.body);
+            if(auth.error) {
+                logger.log({
+                    level: 'error',
+                    message: auth.error,
+                    time: new Date()
+                  });
+                  return res.status(400).send({
+                    data : auth.error,
+                    status : 'fail'
+                });
+            }
             res.send({
                 data : auth,
                 status : 'success'
@@ -177,6 +188,17 @@ router.post('/create', async(req, res) => {
             var existingId = await authorBusiness.validateAuthorId(id);
             if(existingId) {
                 var auth = await authorBusiness.updateAuthor(req.params.id, req.body);
+                if(auth.error) {
+                    logger.log({
+                        level: 'error',
+                        message: auth.error,
+                        time: new Date()
+                      });
+                      return res.status(400).send({
+                        data : auth.error,
+                        status : 'fail'
+                    });
+                }
                 res.send({
                     data : auth,
                     status : 'success'

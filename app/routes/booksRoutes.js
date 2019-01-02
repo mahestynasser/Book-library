@@ -138,6 +138,12 @@ router.post('/search', async(req, res) => {
         else {           
             var book = await bookBusiness.createBook(req.body);
             if(book.error) {
+                logger.log({
+                    level: 'error',
+                    message: book.error,
+                    time: new Date()
+                  });
+                  
                 return res.status(400).send({
                     data : book.error,
                     status : 'fail'
@@ -183,6 +189,12 @@ router.post('/search', async(req, res) => {
             if(existingId) {
                 var book = await bookBusiness.updateBook(req.params.id, req.body);
                 if(book.error) {
+                    logger.log({
+                        level: 'error',
+                        message: book.error,
+                        time: new Date()
+                      });
+
                     return res.status(400).send({
                         data : book.error,
                         status : 'fail'

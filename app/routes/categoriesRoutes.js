@@ -137,10 +137,21 @@ router.get('/', async(req, res) => {
         }
         else {          
             var categ = await categoryBusiness.createCategory(req.body);
+            if(categ.error) {
+                logger.log({
+                    level: 'error',
+                    message: categ.error,
+                    time: new Date()
+                  });
+                  return res.status(400).send({
+                    data : categ.error,
+                    status : 'fail'
+                });
+            }
             res.send({
                 data : categ,
                 status : 'success'
-            })
+            });
         }
     }
     catch(err) {
@@ -176,6 +187,17 @@ router.get('/', async(req, res) => {
             var existingId = await categoryBusiness.validateCategoryId(id);
             if(existingId) {
                 var categ = await categoryBusiness.updateCategory(req.params.id, req.body);
+                if(categ.error) {
+                    logger.log({
+                        level: 'error',
+                        message: categ.error,
+                        time: new Date()
+                      });
+                      return res.status(400).send({
+                        data : categ.error,
+                        status : 'fail'
+                    });
+                }
                 res.send({
                     data : categ,
                     status : 'success'
