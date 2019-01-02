@@ -8,7 +8,7 @@ var createdId;
 
 describe('Create /Categories', () => {
     it('should create a new Category', (done) => {
-      var cat = {name: 'test category'}
+      var cat = {name: 'unit test category'}
   
       request(app)
         .post('/categories/create')
@@ -50,6 +50,17 @@ describe('Create /Categories', () => {
             expect(res.body.status).toBe('fail');
           })
           .end(done);
+      });
+
+      it('should not create a duplicate category', (done) => {
+          request(app)
+            .post('/categories/create')
+            .send({name : 'Alena Graham'})
+            .expect(400)
+            .expect((res) =>{
+              expect(res.body.status).toBe('fail');
+            })
+            .end(done);
       });
 });
 
@@ -100,6 +111,17 @@ describe('Update /Categories', () => {
       })
       .end(done);
     });
+
+    it('should not update a category with existing category name', (done) => {
+      request(app)
+      .put('/categories/update/ed8924b3-53a3-4100-9bd2-d5eef0006082')
+        .send({name : 'Alena Graham'})
+        .expect(400)
+        .expect((res) =>{
+          expect(res.body.status).toBe('fail');
+        })
+        .end(done);
+  });
 });
     
     

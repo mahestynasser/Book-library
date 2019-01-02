@@ -7,7 +7,7 @@ var createdId;
 
 describe('Create /Authors', () => {
     it('should create a new Author', (done) => {
-      var auth = {name: 'test author'}
+      var auth = {name: 'unit test author'}
   
       request(app)
         .post('/authors/create')
@@ -29,6 +29,17 @@ describe('Create /Authors', () => {
         });
     });
   
+    it('should not create a duplicate author', (done) => {
+      request(app)
+        .post('/authors/create')
+        .send({name: 'Ahmad Stanton'})
+        .expect(400)
+        .expect((res) =>{
+          expect(res.body.status).toBe('fail');
+        })
+        .end(done);
+    });
+
     it('should not create an author without a name', (done) => {
       request(app)
         .post('/authors/create')
@@ -66,6 +77,17 @@ describe('Update /Authors', () => {
         .end(done);
     });
   
+    it('should not update an author with an existing name', (done) => {
+      request(app)
+      .put('/authors/update/9306e853-328c-41fe-b882-9661160208df')
+        .send({name : 'Ahmad Stanton'})
+        .expect(400)
+        .expect((res) =>{
+          expect(res.body.status).toBe('fail');
+        })
+        .end(done);
+    });
+
     it('should not update an author without a name', (done) => {
       request(app)
       .put('/authors/update/9306e853-328c-41fe-b882-9661160208df')

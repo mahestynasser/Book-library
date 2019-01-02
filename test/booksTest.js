@@ -8,7 +8,7 @@ var createdId;
 
 describe('Create /Book', () => {
     it('should create a new Book', (done) => {
-      var book = {title: 'test book', author : 'ee878957-83f3-48c4-b899-45dd6c83e926', category : '4964327c-028a-469d-b432-d3b857a10f0d'}
+      var book = {title: 'unit test book', author : 'ee878957-83f3-48c4-b899-45dd6c83e926', category : '4964327c-028a-469d-b432-d3b857a10f0d'}
   
       request(app)
         .post('/books/create')
@@ -28,6 +28,19 @@ describe('Create /Book', () => {
             done();
           }).catch((e) => done(e));
         });
+    });
+
+    it('should not create a duplicate book', (done) => {
+      var book = {title: 'Reiciendis veritatis tempore', author : 'ee878957-83f3-48c4-b899-45dd6c83e926', category : '4964327c-028a-469d-b432-d3b857a10f0d'}
+
+      request(app)
+        .post('/books/create')
+        .send(book)
+        .expect(400)
+        .expect((res) =>{
+          expect(res.body.status).toBe('fail');
+        })
+        .end(done);
     });
   
     it('should not create a book without a title', (done) => {
@@ -51,6 +64,19 @@ describe('Update /Book', () => {
             .expect(200)
             .expect((res) => {
               expect(res.body.data.title).toBe(book.title);
+            })
+            .end(done);
+        });
+
+        it('should not update a book with existing title', (done) => {
+          var book = {title: 'Reiciendis veritatis tempore', author : 'ee878957-83f3-48c4-b899-45dd6c83e926', category : '4964327c-028a-469d-b432-d3b857a10f0d'}
+    
+          request(app)
+          .put('/books/update/2a8ccee7-2790-47a3-9a22-bfcac09cd6a2')
+            .send(book)
+            .expect(400)
+            .expect((res) =>{
+              expect(res.body.status).toBe('fail');
             })
             .end(done);
         });
